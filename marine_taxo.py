@@ -43,6 +43,38 @@ genus2.grid(row = 0, column = 3)
 spp2 = Entry(main_window, width = 50, borderwidth = 5)
 spp2.grid(row = 1, column = 3)
 
+# return a list of taxo names?
+def make_taxo_list(name):
+    safe_string = urllib.parse.quote_plus(name)
+    url = 'https://www.marinespecies.org/rest/AphiaRecordsByName/{}?like=true&marine_only=true&offset=1'
+    url = url.format(safe_string)
+    taxo = []
+    response = requests.get(url)
+    if response:
+        orgData = response.json()
+        for i in orgData[0]:
+            if i == 'kingdom':
+                taxo.append(orgData[0][i])
+            if i == 'phylum':
+                taxo.append(orgData[0][i])
+            if i == 'class':
+                taxo.append(orgData[0][i])
+            if i == 'order':
+                taxo.append(orgData[0][i])
+            if i == 'family':
+                taxo.append(orgData[0][i])
+            if i == 'genus':
+                taxo.append(orgData[0][i])
+            if i == 'species':
+                taxo.append(orgData[0][i])
+    return taxo
+
+def go_thru_list(listname):
+    foo = ""
+    for i in listname:
+        foo += f"{i}\n"
+    return foo
+
 #callback function for clicking the search button
 def on_click():
     # for printing text to gui later
@@ -52,55 +84,15 @@ def on_click():
     # make the species name from the inputs
     # TODO: do I want to do this as one text box?
     name = genus.get() + " " + spp.get()
+    taxo1 = make_taxo_list(name)
+    outputText = go_thru_list(taxo1)
+    textLabel.config(text = outputText)
+
+
     name2 = genus2.get() + " " + spp2.get()
-
-    # stick the species name in the url
-    safe_string = urllib.parse.quote_plus(name)
-    url = 'https://www.marinespecies.org/rest/AphiaRecordsByName/{}?like=true&marine_only=true&offset=1'
-    url = url.format(safe_string)
-
-    safe_string2 = urllib.parse.quote_plus(name2)
-    url2 = 'https://www.marinespecies.org/rest/AphiaRecordsByName/{}?like=true&marine_only=true&offset=1'
-    url2 = url2.format(safe_string2)
-
-    # get the json object for the spp
-    response = requests.get(url)
-    if response:
-        orgData = response.json()
-        for i in orgData[0]:
-            if i == 'kingdom':
-                outputText += f"Kingdom: {orgData[0][i]}"
-            if i == 'phylum':
-                outputText += f"\nPhylum: {orgData[0][i]}"
-            if i == 'class':
-                outputText += f"\nClass: {orgData[0][i]}"
-            if i == 'order':
-                outputText += f"\nOrder: {orgData[0][i]}"
-            if i == 'family':
-                outputText += f"\nFamily: {orgData[0][i]}"
-        # print outputText (taxonomic data)
-        textLabel.config(text = outputText)
-    else:
-        textLabel.config("Organism not found. Please try another.")
-
-    response2 = requests.get(url2)
-    if response2:
-        orgData2 = response2.json()
-        for i in orgData2[0]:
-            if i == 'kingdom':
-                outputText2 += f"Kingdom: {orgData2[0][i]}"
-            if i == 'phylum':
-                outputText2 += f"\nPhylum: {orgData2[0][i]}"
-            if i == 'class':
-                outputText2 += f"\nClass: {orgData2[0][i]}"
-            if i == 'order':
-                outputText2 += f"\nOrder: {orgData2[0][i]}"
-            if i == 'family':
-                outputText2 += f"\nFamily: {orgData2[0][i]}"
-            # print outputText (taxonomic data)
-        textLabel2.config(text = outputText2)
-    else:
-        textLabel2.config("Organism not found. Please try another.")
+    taxo2 = make_taxo_list(name2)
+    outputText2 = go_thru_list(taxo2)
+    textLabel2.config(text = outputText2)
 
 ###########
 # TODO: Error checking is not working!!
