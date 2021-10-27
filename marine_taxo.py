@@ -108,9 +108,13 @@ Button(main_window, text = "Search", command = on_click ).grid(row = 2, columnsp
 
 # place for the outputText later
 textLabel = Label(main_window, text = "")
+#textLabel = Text(main_window)
 textLabel.grid(row = 3, column = 1)
+#textLabel.config(foreground="red")
 
 textLabel2 = Label(main_window, text = "")
+#textLabel2 = Text(main_window)
 textLabel2.grid(row = 3, column = 3)
+#textLabel2.config(foreground="red")
 
 main_window.mainloop()
