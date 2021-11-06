@@ -1,12 +1,13 @@
 """
 TODO:
-- find an image from wikipedia
 - download the image and put on my own server
 - send the url to the requestor
-
+- put online (notforlong.org?)
+- return an error if no image exists
+- possible to parse for near matches?
+    -> turn "grand canyon" into "grand canyon national park"
 FIND OUT:
 - can I resize the image?
-- if the image already has a url, can I send that instead?
 - can I get images from another source and not just wikipedia?
 """
 
@@ -65,3 +66,4 @@ def index():
 
 
 service.run(host='0.0.0.0', port=81)
+
