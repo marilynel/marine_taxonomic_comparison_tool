@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 TODO:
 - download the image and put on my own server
@@ -6,6 +8,7 @@ TODO:
 - return an error if no image exists
 - possible to parse for near matches?
     -> turn "grand canyon" into "grand canyon national park"
+- add 'static' dir
 FIND OUT:
 - can I resize the image?
 - can I get images from another source and not just wikipedia?
@@ -30,7 +33,7 @@ def imageStuff(item):
     print(item)
 
 
-    wikipage = wikipedia.page(item)
+    wikipage = wikipedia.page(item, auto_suggest=False)
     #print(f"Page title: {wikipage.title}")
     #print(f"Page URL: {wikipage.url}")
     #print(f"Number of images on page: {len(wikipage.images)}")
@@ -62,8 +65,8 @@ def index():
     imageName = request.args.get('name')
     filename = imageStuff(imageName)
     # size = request.args.get('size')
-    return {"url": "http://localhost:81/" + url_for('static', filename=filename)}
+    return {"url": "http://notforlong.net:5007/static/" + filename}
 
 
-service.run(host='0.0.0.0', port=81)
-
+service.run(host='0.0.0.0', port=5007)
+# open ports are 5000 to 5010
