@@ -85,22 +85,50 @@ def clear_values():
     spp.delete(0, END)
     spp2.delete(0, END)
 
-def post_image(colNum):
+def post_image(colNum, name):
+    safe_string = urllib.parse.quote_plus(name)
+    url = "http://notforlong.net:5007/requestImage?name={}"
+    url = url.format(safe_string)
+    imgResponse = requests.get(url)
+    if imgResponse.status_code == 200:
+        print("ok " + name)
+        res = imgResponse.json()
+        # url of image is at: res['url']
+        photoResponse = requests.get(res['url'])
+        filename = name + "." + res['url'].split(".")[-1]
+        file = open(filename, "wb")
+        file.write(photoResponse.content)
     #photoResponse = requests.get("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Sanc0063_-_Flickr_-_NOAA_Photo_Library.jpg/330px-Sanc0063_-_Flickr_-_NOAA_Photo_Library.jpg")
     #file = open("kelp.jpeg", "wb")
     #file.write(photoResponse.content)
     #file.close()
-    #canvas = Canvas(main_window, width = 300, height = 300)
-    #canvas.grid(row = 5, columnspan = 4)
-    #photo = ImageTk.PhotoImage(Image.open("kelp.jpeg"))
-    #canvas.create_image(100,100, image = photo)
-    imgFile = "C:/Users/15124/kelp.jpg"
-    img = Image.open(imgFile)
-    img = img.resize((200,150), Image.ANTIALIAS)
-    img = ImageTk.PhotoImage(img)
-    panel = Label(main_window, image = img)
-    panel.image = img
-    panel.grid(row = 4, column = colNum)
+        image = Image.open(filename)
+        image = image.resize((200,150), Image.ANTIALIAS)
+        photo = ImageTk.PhotoImage(image)
+        label = Label(main_window, image = photo)
+        label.image = photo
+        label.grid(row=4, column = colNum)
+
+        #canvas = Canvas(main_window, width = 300, height = 300)
+        #canvas.grid(row = 4, column = colNum)
+        #photo = ImageTk.PhotoImage(Image.open(filename))
+        #canvas.create_image(500,500, image = photo)
+    #imgFile = "C:/Users/15124/kelp.jpg"
+        #img = Image.open(photoResponse)
+        #img = img.resize((200,150), Image.ANTIALIAS)
+        #img = ImageTk.PhotoImage(img)
+        #panel = Label(main_window, image = img)
+        #panel.image = img
+        #panel.grid(row = 4, column = colNum)
+
+def post_wiki_data(colNum, name):
+    safe_string = urllib.parse.quote_plus(name)
+    url = "http://flip2.engr.oregonstate.edu:3619/?page={}"
+    url = url.format(safe_string)
+    imgResponse = requests.get(url)
+    if imgResponse.status_code == 200:
+        print("yes " + name)
+
 
 #callback function for clicking the search button
 def on_click():
@@ -145,8 +173,10 @@ def on_click():
     #strText2 = strText2.text()
     strText2 = f"Text from teammate's service about {name2} will go here."
     blurb2.config(text = strText2)
-    post_image(1)
-    post_image(3)
+    post_image(1, name)
+    post_image(3, name2)
+    post_wiki_data(1, name)
+    post_wiki_data(3, name2)
 
 
 ###########
