@@ -10,7 +10,7 @@ There are currently some limitations to this service:
   1. This is a Wikipedia specific service. It can only retrieve images from corresponding wikipedia articles
   2. This does not return the "main" image on the wikipedia page.
         --> TODO 11/9/2021
-  4. Error handling is still in progress and the service is not yet ready to return the correct input if there is no page or no images on the page available
+  4. Error handling is still in progress and the service is not yet ready to return the correct output if there is no page or no images on the page available
         --> TODO 11/9/2021
 
 Please let me know if you have any other concerns or issues with the service. Thank you!
