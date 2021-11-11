@@ -8,15 +8,6 @@ from difflib import SequenceMatcher
 main_window = Tk()
 main_window.resizable(width = True, height = True)
 
-#photoResponse = requests.get("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Sanc0063_-_Flickr_-_NOAA_Photo_Library.jpg/330px-Sanc0063_-_Flickr_-_NOAA_Photo_Library.jpg")
-#file = open("kelp.jpg", "wb")
-#file.write(response.content)
-#file.close()
-
-# example for invoking service
-# image = request.get("notforlong.org?name={}&size={}".format("kelp", "400x400"))
-# will need to encode and decode base 64 image
-
 
 # labels for text bars for searching
 Label(main_window, text = "Genus 1:").grid(row = 0, column = 0)
@@ -91,17 +82,13 @@ def post_image(colNum, name):
     url = url.format(safe_string)
     imgResponse = requests.get(url)
     if imgResponse.status_code == 200:
-        print("ok " + name)
+        print("Marilyn's image service for " + name)
         res = imgResponse.json()
         # url of image is at: res['url']
         photoResponse = requests.get(res['url'])
         filename = name + "." + res['url'].split(".")[-1]
         file = open(filename, "wb")
         file.write(photoResponse.content)
-    #photoResponse = requests.get("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Sanc0063_-_Flickr_-_NOAA_Photo_Library.jpg/330px-Sanc0063_-_Flickr_-_NOAA_Photo_Library.jpg")
-    #file = open("kelp.jpeg", "wb")
-    #file.write(photoResponse.content)
-    #file.close()
         image = Image.open(filename)
         image = image.resize((200,150), Image.ANTIALIAS)
         photo = ImageTk.PhotoImage(image)
@@ -109,25 +96,31 @@ def post_image(colNum, name):
         label.image = photo
         label.grid(row=4, column = colNum)
 
-        #canvas = Canvas(main_window, width = 300, height = 300)
-        #canvas.grid(row = 4, column = colNum)
-        #photo = ImageTk.PhotoImage(Image.open(filename))
-        #canvas.create_image(500,500, image = photo)
-    #imgFile = "C:/Users/15124/kelp.jpg"
-        #img = Image.open(photoResponse)
-        #img = img.resize((200,150), Image.ANTIALIAS)
-        #img = ImageTk.PhotoImage(img)
-        #panel = Label(main_window, image = img)
-        #panel.image = img
-        #panel.grid(row = 4, column = colNum)
 
 def post_wiki_data(colNum, name):
     safe_string = urllib.parse.quote_plus(name)
     url = "http://flip2.engr.oregonstate.edu:3619/?page={}"
     url = url.format(safe_string)
-    imgResponse = requests.get(url)
-    if imgResponse.status_code == 200:
-        print("yes " + name)
+    response = requests.get(url)
+    refStr = ""
+    refDict = {}
+    if response.status_code == 200:
+        print("Arek's wiki service for " + name)
+        res = response.json()
+        #print(res)
+        for i in res:
+            if i == "references":
+                # res[i] is a dict
+                refDict = res[i]
+        for j in refDict:
+            #print(refDict[j])
+            refStr += refDict[j]
+        label = Label(main_window, text=refStr)
+        label.grid(row=6, column=colNum)
+                #print(res[i])
+        # following lines don't work:
+        #references = requests.get(res['References'])
+        #print(references)
 
 
 #callback function for clicking the search button
@@ -166,12 +159,12 @@ def on_click():
 
     #strText1 = request.get()
     #strText1 = strText1.text()
-    strText1 = f"Text from teammate's service about {name} will go here."
+    #strText1 = f"Text from teammate's service about {name} will go here."
     blurb1.config(text = strText1)
 
     #strText2 = request.get()
     #strText2 = strText2.text()
-    strText2 = f"Text from teammate's service about {name2} will go here."
+    #strText2 = f"Text from teammate's service about {name2} will go here."
     blurb2.config(text = strText2)
     post_image(1, name)
     post_image(3, name2)
@@ -183,7 +176,6 @@ def on_click():
 # TODO:
 # change banner at top to say somthing other than 'tk'
 # color comparison
-# add picture after button is clicked
 # change button to say "new search" after first search is done?
 ###########
 
