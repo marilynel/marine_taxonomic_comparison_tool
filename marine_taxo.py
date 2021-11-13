@@ -99,7 +99,7 @@ def post_image(colNum, name):
 
 def post_wiki_data(colNum, name):
     safe_string = urllib.parse.quote_plus(name)
-    url = "http://flip2.engr.oregonstate.edu:3619/?page={}"
+    url = "http://flip2.engr.oregonstate.edu:4203/?page={}"
     url = url.format(safe_string)
     response = requests.get(url)
     refStr = ""
@@ -107,20 +107,18 @@ def post_wiki_data(colNum, name):
     if response.status_code == 200:
         print("Arek's wiki service for " + name)
         res = response.json()
-        #print(res)
         for i in res:
-            if i == "references":
-                # res[i] is a dict
-                refDict = res[i]
-        for j in refDict:
-            #print(refDict[j])
-            refStr += refDict[j]
+            if i == "Description":
+                for j in res[i]:
+                    refStr = res[i][j]
         label = Label(main_window, text=refStr)
         label.grid(row=6, column=colNum)
-                #print(res[i])
-        # following lines don't work:
-        #references = requests.get(res['References'])
-        #print(references)
+
+#######
+# TODO:
+# - format output string
+# - take out [] and ref numbers
+#######
 
 
 #callback function for clicking the search button
