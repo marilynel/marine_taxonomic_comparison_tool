@@ -62,7 +62,7 @@ def imageStuff(item):
         with open("static/" + filename, 'wb') as f:
             shutil.copyfileobj(r.raw, f)
         return filename
-    else:
+    else if r.status_code == 500:
         filename = "imagenotfound.png"
         return filename
         #return("nope")
