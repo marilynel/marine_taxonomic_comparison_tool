@@ -20,6 +20,7 @@ from flask import Flask, request, url_for
 import wikipedia
 import requests
 import shutil
+#import validators
 
 service = Flask(__name__)
 
@@ -34,6 +35,10 @@ def imageStuff(item):
     # clean up string to make it wiki url friendly
     if " " in item:
         item = item.replace(" ", "_")
+
+    validRes = wikipedia.search(item, results = 1)
+    if not validRes:
+        return "nope"
 
     # get the whole page
     wikipage = wikipedia.page(item, auto_suggest=False)
@@ -63,9 +68,15 @@ def imageStuff(item):
 @service.route('/requestImage', methods=['GET'])
 def index():
     imageName = request.args.get('name')
+
     filename = imageStuff(imageName)
-    # returns JSON with where the copy of the image now lives
-    return {"url": "http://notforlong.net:5007/static/" + filename}
+    if filename == "nope":
+        return "Image not found"
+    else:
+        return {"url": "http://notforlong.net:5007/static/" + filename}
+
+#    return "Image not found"
+
 
 service.run(host='0.0.0.0', port=5007)
 # open ports are 5000 to 5010
