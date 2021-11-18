@@ -75,8 +75,6 @@ def index():
     else:
         return {"url": "http://notforlong.net:5007/static/" + filename}
 
-#    return "Image not found"
-
 
 service.run(host='0.0.0.0', port=5007)
 # open ports are 5000 to 5010
