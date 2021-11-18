@@ -52,9 +52,10 @@ def imageStuff(item):
     # get request 0th image
     r = requests.get(wikipage.images[0], headers = headers, stream = True)
     # give it a new name using input string and suffix from wiki image
-    filename = item + "." + wikipage.images[0].split(".")[-1]
+    #filename = item + "." + wikipage.images[0].split(".")[-1]
     # 200 is good, any other number is bad
     if r.status_code == 200:
+        filename = item + "." + wikipage.images[0].split(".")[-1]
         # set decode_content value to true, otherwise the image file size will be zero
         r.raw.decode_content = True
         # save as a local file with write binary permission
@@ -62,7 +63,9 @@ def imageStuff(item):
             shutil.copyfileobj(r.raw, f)
         return filename
     else:
-        return("nope")
+        filename = "imagenotfound.png"
+        return filename
+        #return("nope")
         #print(r.status_code)
 
 
