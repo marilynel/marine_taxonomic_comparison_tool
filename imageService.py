@@ -38,7 +38,8 @@ def imageStuff(item):
 
     validRes = wikipedia.search(item, results = 1)
     if not validRes:
-        return "nope"
+        filename = "imagenotfound.png"
+        return filename
 
     # get the whole page
     wikipage = wikipedia.page(item, auto_suggest=False)
@@ -70,10 +71,10 @@ def index():
     imageName = request.args.get('name')
 
     filename = imageStuff(imageName)
-    if filename == "nope":
-        return {"url": "http://notforlong.net:5007/static/imagenotfound.png"}
-    else:
-        return {"url": "http://notforlong.net:5007/static/" + filename}
+    #if filename == "nope":
+    #    return {"url": "http://notforlong.net:5007/static/imagenotfound.png"}
+    #else:
+    return {"url": "http://notforlong.net:5007/static/" + filename}
 
 
 service.run(host='0.0.0.0', port=5007)
