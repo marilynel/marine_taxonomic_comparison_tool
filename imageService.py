@@ -71,7 +71,7 @@ def index():
 
     filename = imageStuff(imageName)
     if filename == "nope":
-        return "Image not found"
+        return {"url": "http://notforlong.net:5007/static/imagenotfound.png"}
     else:
         return {"url": "http://notforlong.net:5007/static/" + filename}
 
