@@ -68,7 +68,7 @@ def imageStuff(item):
             return filename
             #return("nope")
             #print(r.status_code)
-    except:
+    except wikipedia.exceptions.PageError:
         filename = "imagenotfound.png"
         print("got here!")
         return filename
