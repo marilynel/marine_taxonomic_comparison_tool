@@ -36,37 +36,42 @@ def imageStuff(item):
     if " " in item:
         item = item.replace(" ", "_")
 
-    validRes = wikipedia.search(item, results = 1)
-    if len(validRes) == 0:
-        filename = "imagenotfound.png"
-        return filename
+    #validRes = wikipedia.search(item, results = 1)
+    #if len(validRes) == 0:
+        #filename = "imagenotfound.png"
+        #return filename
+    try:
+        #exists = wikipedia.summary(item)
+        # get the whole page
+        wikipage = wikipedia.page(item, auto_suggest=False)
+        # wikipage.images is a list of the images
+        #print(f"Number of images on page: {len(wikipage.images)}")
+        # the 0th image is not the main image! TODO how to get main image???
+        #print(f"main image: {wikipage.images[0]}")
+        # wikipage.images[0] returns the url of the 0th image
 
-    # get the whole page
-    wikipage = wikipedia.page(item, auto_suggest=False)
-    # wikipage.images is a list of the images
-    #print(f"Number of images on page: {len(wikipage.images)}")
-    # the 0th image is not the main image! TODO how to get main image???
-    #print(f"main image: {wikipage.images[0]}")
-    # wikipage.images[0] returns the url of the 0th image
-
-    # get request 0th image
-    r = requests.get(wikipage.images[0], headers = headers, stream = True)
-    # give it a new name using input string and suffix from wiki image
-    #filename = item + "." + wikipage.images[0].split(".")[-1]
-    # 200 is good, any other number is bad
-    if r.status_code == 200:
-        filename = item + "." + wikipage.images[0].split(".")[-1]
-        # set decode_content value to true, otherwise the image file size will be zero
-        r.raw.decode_content = True
-        # save as a local file with write binary permission
-        with open("static/" + filename, 'wb') as f:
-            shutil.copyfileobj(r.raw, f)
-        return filename
-    else:
+        # get request 0th image
+        r = requests.get(wikipage.images[0], headers = headers, stream = True)
+        # give it a new name using input string and suffix from wiki image
+        #filename = item + "." + wikipage.images[0].split(".")[-1]
+        # 200 is good, any other number is bad
+        if r.status_code == 200:
+            filename = item + "." + wikipage.images[0].split(".")[-1]
+            # set decode_content value to true, otherwise the image file size will be zero
+            r.raw.decode_content = True
+            # save as a local file with write binary permission
+            with open("static/" + filename, 'wb') as f:
+                shutil.copyfileobj(r.raw, f)
+            return filename
+        else:
+            filename = "imagenotfound.png"
+            return filename
+            #return("nope")
+            #print(r.status_code)
+    except:
         filename = "imagenotfound.png"
+        print("got here!")
         return filename
-        #return("nope")
-        #print(r.status_code)
 
 
 @service.route('/requestImage', methods=['GET'])
