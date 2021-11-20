@@ -33,14 +33,16 @@ headers = {
 # get the image from wikipedia
 def imageStuff(item):
     # clean up string to make it wiki url friendly
-    if " " in item:
-        item = item.replace(" ", "_")
+    #if " " in item:
+        #item = item.replace(" ", "_")
 
     #validRes = wikipedia.search(item, results = 1)
     #if len(validRes) == 0:
         #filename = "imagenotfound.png"
         #return filename
     try:
+        if " " in item:
+            item = item.replace(" ", "_")
         #exists = wikipedia.summary(item)
         # get the whole page
         wikipage = wikipedia.page(item, auto_suggest=False)
@@ -76,12 +78,9 @@ def imageStuff(item):
 
 @service.route('/requestImage', methods=['GET'])
 def index():
+    # TODO: specify error if no input
     imageName = request.args.get('name')
-
     filename = imageStuff(imageName)
-    #if filename == "nope":
-    #    return {"url": "http://notforlong.net:5007/static/imagenotfound.png"}
-    #else:
     return {"url": "http://notforlong.net:5007/static/" + filename}
 
 
