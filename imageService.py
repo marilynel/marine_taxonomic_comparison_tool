@@ -32,30 +32,14 @@ headers = {
 
 # get the image from wikipedia
 def imageStuff(item):
-    # clean up string to make it wiki url friendly
-    #if " " in item:
-        #item = item.replace(" ", "_")
-
-    #validRes = wikipedia.search(item, results = 1)
-    #if len(validRes) == 0:
-        #filename = "imagenotfound.png"
-        #return filename
     try:
         if " " in item:
             item = item.replace(" ", "_")
-        #exists = wikipedia.summary(item)
-        # get the whole page
         wikipage = wikipedia.page(item, auto_suggest=False)
-        # wikipage.images is a list of the images
-        #print(f"Number of images on page: {len(wikipage.images)}")
-        # the 0th image is not the main image! TODO how to get main image???
-        #print(f"main image: {wikipage.images[0]}")
-        # wikipage.images[0] returns the url of the 0th image
 
+        # wikipage.images[0] returns the url of the 0th image
         # get request 0th image
         r = requests.get(wikipage.images[0], headers = headers, stream = True)
-        # give it a new name using input string and suffix from wiki image
-        #filename = item + "." + wikipage.images[0].split(".")[-1]
         # 200 is good, any other number is bad
         if r.status_code == 200:
             filename = item + "." + wikipage.images[0].split(".")[-1]
@@ -68,8 +52,6 @@ def imageStuff(item):
         else:
             filename = "imagenotfound.png"
             return filename
-            #return("nope")
-            #print(r.status_code)
     except wikipedia.exceptions.PageError:
         filename = "imagenotfound.png"
         print("got here!")
