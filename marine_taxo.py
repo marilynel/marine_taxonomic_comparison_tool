@@ -118,7 +118,8 @@ def post_wiki_data(colNum, name):
     scientificName = urllib.parse.quote_plus(name)
     #wikiServiceUrl = "http://flip2.engr.oregonstate.edu:4203/?page={}"
     # for temporarily running it locally:
-    wikiServiceUrl = "http://localhost:4203/?page={}"
+    #wikiServiceUrl = "http://localhost:4203/?page={}"
+    wikiServiceUrl = "https://areks-wikipedia-scraper.herokuapp.com/?page={}"
     wikiServiceUrl = wikiServiceUrl.format(scientificName)
     response = requests.get(wikiServiceUrl)
     infoStr = ""
