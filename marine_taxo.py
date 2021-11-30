@@ -25,13 +25,22 @@ Label(main_window, text = "species 1:").grid(row = 1, column = 0)
 Label(main_window, text = "Genus 2:").grid(row = 0, column = 2)
 Label(main_window, text = "species 2:").grid(row = 1, column = 2)
 
-# TODO: do I need this??
 # for printing text to gui later; may not be needed?
-outputText = ""
-outputText2 = ""
-labels = ""
-strText1 = ""
-strText2 = ""
+kingdomText1 = ""
+kingdomText2 = ""
+phylumText1 = ""
+phylumText2 = ""
+classText1 = ""
+classText2 = ""
+orderText1 = ""
+orderText2 = ""
+familyText1 = ""
+familyText2 = ""
+genusText1 = ""
+genusText2 = ""
+speciesText1 = ""
+speciesText2 = ""
+
 
 # Input/search bars
 genus = Entry(main_window, width = 50, borderwidth = 5)
@@ -49,39 +58,54 @@ def make_taxo_list(name):
     scientificName = urllib.parse.quote_plus(name)
     wormsUrl = 'https://www.marinespecies.org/rest/AphiaRecordsByName/{}?like=true&marine_only=true&offset=1'
     wormsUrl = wormsUrl.format(scientificName)
-    taxo = ""
+    kingdom = ""
+    phylum = ""
+    classTaxo = ""
+    order = ""
+    family = ""
+    genus = ""
+    species = ""
     response = requests.get(wormsUrl)
     if response.status_code == 200:
         orgData = response.json()
         # Parse returned JSON object for taxonomic data
-        # currently catting a string, commented out sections append to a list instead (need to change taxo type)
         for i in orgData[0]:
             if i == 'kingdom':
-                taxo+=orgData[0][i] + "\n"
+                kingdom = orgData[0][i]
+                #taxo+=orgData[0][i] + "\n"
                 #taxo.append(orgData[0][i])
             if i == 'phylum':
-                taxo+=orgData[0][i] + "\n"
+                phylum = orgData[0][i]
+                #taxo+=orgData[0][i] + "\n"
                 #taxo.append(orgData[0][i])
             if i == 'class':
-                taxo+=orgData[0][i] + "\n"
+                classTaxo = orgData[0][i]
+                #taxo+=orgData[0][i] + "\n"
                 #taxo.append(orgData[0][i])
             if i == 'order':
-                taxo+=orgData[0][i] + "\n"
+                order = orgData[0][i]
+                #taxo+=orgData[0][i] + "\n"
                 #taxo.append(orgData[0][i])
             if i == 'family':
-                taxo+=orgData[0][i] + "\n"
+                family = orgData[0][i]
+                #taxo+=orgData[0][i] + "\n"
                 #taxo.append(orgData[0][i])
             if i == 'genus':
-                taxo+=orgData[0][i] + "\n"
+                genus = orgData[0][i]
+                #taxo+=orgData[0][i] + "\n"
                 #taxo.append(orgData[0][i])
-            if i == 'species':
-                taxo+=orgData[0][i]
+            #if i == 'species':
+                #species = orgData[0][i]
+                #taxo+=orgData[0][i]
                 #taxo.append(orgData[0][i])
-        taxo+=name
+        #taxo+=name
         #taxo.append(name)
-        return taxo
+        #return taxo
+        return kingdom, phylum, classTaxo, order, family, genus, name
     else:
-        return f"{name} not found in database."
+        return "","","",f"{name} not found in database.","","",""
+
+
 
 # Function: clear search bars
 def clear_values():
@@ -89,6 +113,7 @@ def clear_values():
     genus2.delete(0, END)
     spp.delete(0, END)
     spp2.delete(0, END)
+
 
 # Function: get image (my service)
 def post_image(colNum, name):
@@ -103,7 +128,7 @@ def post_image(colNum, name):
         res = imgResponse.json()
         # url of image is at: res['url']
         photoResponse = requests.get(res['url'])
-        filename = name + "." + res['url'].split(".")[-1]
+        filename = "static/" + name + "." + res['url'].split(".")[-1]
         file = open(filename, "wb")
         file.write(photoResponse.content)
         image = Image.open(filename)
@@ -111,14 +136,11 @@ def post_image(colNum, name):
         photo = ImageTk.PhotoImage(image)
         label = Label(main_window, image = photo)
         label.image = photo
-        label.grid(row=4, column = colNum)
+        label.grid(row=10, column = colNum)
 
 # Function: get data (Arek's service)
 def post_wiki_data(colNum, name):
     scientificName = urllib.parse.quote_plus(name)
-    #wikiServiceUrl = "http://flip2.engr.oregonstate.edu:4203/?page={}"
-    # for temporarily running it locally:
-    #wikiServiceUrl = "http://localhost:4203/?page={}"
     wikiServiceUrl = "https://areks-wikipedia-scraper.herokuapp.com/?page={}"
     wikiServiceUrl = wikiServiceUrl.format(scientificName)
     response = requests.get(wikiServiceUrl)
@@ -133,55 +155,151 @@ def post_wiki_data(colNum, name):
         infoStr = re.sub('[\[][0-9]{,2}[\]]', '', infoStr)
     else:
         infoStr = f"No information found for {name}."
-    label = Label(main_window, text=infoStr, wraplength=400)
-    label.grid(row=6, column=colNum)
+    return infoStr
+
 
 # Function: callback function for clicking the search button
 def on_click():
-    global outputText, outputText2
-    global strText1, strText2
+    #global outputText, outputText2
+    global kingdomText1, kingdomText2, phylumText1, phylumText2, classText1, classText2, orderText1, orderText2, familyText1, familyText2, genusText1, genusText2, speciesText1, speciesText2
+    #global strText1, strText2
 
     name = genus.get() + " " + spp.get()
-    outputText = make_taxo_list(name)
-
     name2 = genus2.get() + " " + spp2.get()
-    outputText2 = make_taxo_list(name2)
 
-# TODO: this doesn't work
-    # compare strings
-    match = SequenceMatcher(None, outputText, outputText2).find_longest_match(0, len(outputText), 0, len(outputText2))
-    equalSubStr = outputText[match.a: match.a + match.size]
+    kingdomText1, phylumText1, classText1, orderText1, familyText1, genusText1, speciesText1 = make_taxo_list(name)
+    kingdomText2, phylumText2, classText2, orderText2, familyText2, genusText2, speciesText2 = make_taxo_list(name2)
 
-    textLabel.config(text = outputText)
-    textLabel2.config(text = outputText2)
 
-    textLabelsTaxNames.config(text = "Kingdom:\nPhylum:\nClass:\nOrder:\nFamily:\nGenus:\nSpecies:")
+    kingdomLabel1.config(text = kingdomText1)
+    kingdomLabel2.config(text = kingdomText2)
+
+    # ooooooh fun, comparison
+    if (kingdomText1 != kingdomText2):
+        kingdomLabel.config(foreground = "red")
+        kingdomLabel1.config(foreground = "red")
+        kingdomLabel2.config(foreground = "red")
+    if (phylumText1 != phylumText2):
+        phylumLabel.config(foreground = "red")
+        phylumLabel1.config(foreground = "red")
+        phylumLabel2.config(foreground = "red")
+    if (classText1 != classText2):
+        classLabel.config(foreground = "red")
+        classLabel1.config(foreground = "red")
+        classLabel2.config(foreground = "red")
+    if (orderText1 != orderText2):
+        orderLabel.config(foreground = "red")
+        orderLabel1.config(foreground = "red")
+        orderLabel2.config(foreground = "red")
+    if (familyText1 != familyText2):
+        familyLabel.config(foreground = "red")
+        familyLabel1.config(foreground = "red")
+        familyLabel2.config(foreground = "red")
+    if (genusText1 != genusText2):
+        genusLabel.config(foreground = "red")
+        genusLabel1.config(foreground = "red")
+        genusLabel2.config(foreground = "red")
+    if (speciesText1 != speciesText2):
+        speciesLabel.config(foreground = "red")
+        speciesLabel1.config(foreground = "red")
+        speciesLabel2.config(foreground = "red")
+
+
+
+    phylumLabel1.config(text = phylumText1)
+    phylumLabel2.config(text = phylumText2)
+    classLabel1.config(text = classText1)
+    classLabel2.config(text = classText2)
+    orderLabel1.config(text = orderText1)
+    orderLabel2.config(text = orderText2)
+    familyLabel1.config(text = familyText1)
+    familyLabel2.config(text = familyText2)
+    genusLabel1.config(text = genusText1)
+    genusLabel2.config(text = genusText2)
+    speciesLabel1.config(text = speciesText1)
+    speciesLabel2.config(text = speciesText2)
+
+
+    kingdomLabel.config(text="Kingdom:")
+    phylumLabel.config(text="Phylum:")
+    classLabel.config(text="Class:")
+    orderLabel.config(text="Order:")
+    familyLabel.config(text="Family:")
+    genusLabel.config(text="Genus:")
+    speciesLabel.config(text="Species:")
+
     clear_values()
 
-    blurb1.config(text = strText1)
-    blurb2.config(text = strText2)
+    blurb1.config(text = post_wiki_data(1, name))
+    blurb2.config(text = post_wiki_data(3, name2))
+
     post_image(1, name)
     post_image(3, name2)
-    post_wiki_data(1, name)
-    post_wiki_data(3, name2)
+
 
 # Button widget
 Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4)
 
 # for King Philip labels
-textLabelsTaxNames = Label(main_window, text = "")
-textLabelsTaxNames.grid(row = 3, column = 0)
+kingdomLabel = Label(main_window, text = "")
+kingdomLabel.grid(row = 3, column = 0)
+phylumLabel = Label(main_window, text = "")
+phylumLabel.grid(row = 4, column = 0)
+classLabel = Label(main_window, text = "")
+classLabel.grid(row = 5, column = 0)
+orderLabel = Label(main_window, text = "")
+orderLabel.grid(row = 6, column = 0)
+familyLabel = Label(main_window, text = "")
+familyLabel.grid(row = 7, column = 0)
+genusLabel = Label(main_window, text = "")
+genusLabel.grid(row = 8, column = 0)
+speciesLabel = Label(main_window, text = "")
+speciesLabel.grid(row = 9, column = 0)
 
-# place for the outputText
-textLabel = Label(main_window, text = "")
-textLabel.grid(row = 3, column = 1)
-textLabel2 = Label(main_window, text = "")
-textLabel2.grid(row = 3, column = 3)
 
-blurb1 = Label(main_window, text = "")
-blurb1.grid(row = 5, column = 1)
-blurb2 = Label(main_window, text = "")
-blurb2.grid(row = 5, column = 3)
+#### Individual text label boxes for each taxonomic level
+kingdomLabel1 = Label(main_window, text = "")
+kingdomLabel1.grid(row = 3, column = 1)
+kingdomLabel2 = Label(main_window, text = "")
+kingdomLabel2.grid(row = 3, column = 3)
+
+phylumLabel1 = Label(main_window, text = "")
+phylumLabel1.grid(row = 4, column = 1)
+phylumLabel2 = Label(main_window, text = "")
+phylumLabel2.grid(row = 4, column = 3)
+
+classLabel1 = Label(main_window, text = "")
+classLabel1.grid(row = 5, column = 1)
+classLabel2 = Label(main_window, text = "")
+classLabel2.grid(row = 5, column = 3)
+
+orderLabel1 = Label(main_window, text = "")
+orderLabel1.grid(row = 6, column = 1)
+orderLabel2 = Label(main_window, text = "")
+orderLabel2.grid(row = 6, column = 3)
+
+familyLabel1 = Label(main_window, text = "")
+familyLabel1.grid(row = 7, column = 1)
+familyLabel2 = Label(main_window, text = "")
+familyLabel2.grid(row = 7, column = 3)
+
+genusLabel1 = Label(main_window, text = "")
+genusLabel1.grid(row = 8, column = 1)
+genusLabel2 = Label(main_window, text = "")
+genusLabel2.grid(row = 8, column = 3)
+
+speciesLabel1 = Label(main_window, text = "")
+speciesLabel1.grid(row = 9, column = 1)
+speciesLabel2 = Label(main_window, text = "")
+speciesLabel2.grid(row = 9, column = 3)
+
+
+
+
+blurb1 = Label(main_window, text = "", wraplength=400)
+blurb1.grid(row = 11, column = 1)
+blurb2 = Label(main_window, text = "", wraplength=400)
+blurb2.grid(row = 11, column = 3)
 
 # Let's do this
 main_window.mainloop()
