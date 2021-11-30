@@ -17,6 +17,7 @@ from difflib import SequenceMatcher
 
 
 main_window = Tk()
+main_window.title("Marine Organism Taxonomic Comparison Tool")
 main_window.resizable(width = True, height = True)
 
 # Labels for search bars
