@@ -150,9 +150,13 @@ def post_wiki_data(colNum, name):
         print("Arek's wiki service for " + name)
         res = response.json()
         for i in res:
-            if i == "Description":
-                for j in res[i]:
-                    infoStr = res[i][j]
+            #if i == "Description":
+            if i == "intro":
+                #for j in res[i]:
+                    #infoStr = res[i][j]
+                    #break
+                infoStr = res[i]
+                break
         infoStr = re.sub('[\[][0-9]{,2}[\]]', '', infoStr)
     else:
         infoStr = f"No information found for {name}."
