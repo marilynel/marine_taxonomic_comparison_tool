@@ -3,18 +3,14 @@ from PIL import ImageTk, Image
 import requests
 import json
 import urllib.parse
-from difflib import SequenceMatcher
+#from difflib import SequenceMatcher
 
 
 ###########
 # TODO:
-# change banner at top to say somthing other than 'tk'
-# color comparison for different taxonomies
-# recognize error from Arek's service and print appropriate imgResponse
-#       EX: Nereocystis luetkeana will have image response but not wikidata response, show image but error message for wikidata
+# Wikipedia link
+# additional info?
 ###########
-
-
 
 main_window = Tk()
 main_window.title("Marine Organism Taxonomic Comparison Tool")
@@ -26,7 +22,7 @@ Label(main_window, text = "species 1:").grid(row = 1, column = 0)
 Label(main_window, text = "Genus 2:").grid(row = 0, column = 2)
 Label(main_window, text = "species 2:").grid(row = 1, column = 2)
 
-# for printing text to gui later; may not be needed?
+# For printing text to gui later; may not be needed?
 kingdomText1 = ""
 kingdomText2 = ""
 phylumText1 = ""
@@ -73,35 +69,16 @@ def make_taxo_list(name):
         for i in orgData[0]:
             if i == 'kingdom':
                 kingdom = orgData[0][i]
-                #taxo+=orgData[0][i] + "\n"
-                #taxo.append(orgData[0][i])
             if i == 'phylum':
                 phylum = orgData[0][i]
-                #taxo+=orgData[0][i] + "\n"
-                #taxo.append(orgData[0][i])
             if i == 'class':
                 classTaxo = orgData[0][i]
-                #taxo+=orgData[0][i] + "\n"
-                #taxo.append(orgData[0][i])
             if i == 'order':
                 order = orgData[0][i]
-                #taxo+=orgData[0][i] + "\n"
-                #taxo.append(orgData[0][i])
             if i == 'family':
                 family = orgData[0][i]
-                #taxo+=orgData[0][i] + "\n"
-                #taxo.append(orgData[0][i])
             if i == 'genus':
                 genus = orgData[0][i]
-                #taxo+=orgData[0][i] + "\n"
-                #taxo.append(orgData[0][i])
-            #if i == 'species':
-                #species = orgData[0][i]
-                #taxo+=orgData[0][i]
-                #taxo.append(orgData[0][i])
-        #taxo+=name
-        #taxo.append(name)
-        #return taxo
         return kingdom, phylum, classTaxo, order, family, genus, name
     else:
         return "","","",f"{name} not found in database.","","",""
@@ -123,8 +100,7 @@ def post_image(colNum, name):
     imageServiceUrl = imageServiceUrl.format(scientificName)
     imgResponse = requests.get(imageServiceUrl)
     if imgResponse.status_code == 200:
-        # could I clean this up?? too scared to touch it
-        # gets image from service and sets it up so tkinter can display it
+        # gets image from service and sets it up so tkinter can display it (including saving to local 'static' dir)
         print("Marilyn's image service for " + name)
         res = imgResponse.json()
         # url of image is at: res['url']
@@ -150,11 +126,7 @@ def post_wiki_data(colNum, name):
         print("Arek's wiki service for " + name)
         res = response.json()
         for i in res:
-            #if i == "Description":
             if i == "intro":
-                #for j in res[i]:
-                    #infoStr = res[i][j]
-                    #break
                 infoStr = res[i]
                 break
         infoStr = re.sub('[\[][0-9]{,2}[\]]', '', infoStr)
@@ -165,9 +137,7 @@ def post_wiki_data(colNum, name):
 
 # Function: callback function for clicking the search button
 def on_click():
-    #global outputText, outputText2
     global kingdomText1, kingdomText2, phylumText1, phylumText2, classText1, classText2, orderText1, orderText2, familyText1, familyText2, genusText1, genusText2, speciesText1, speciesText2
-    #global strText1, strText2
 
     name = genus.get() + " " + spp.get()
     name2 = genus2.get() + " " + spp2.get()
@@ -175,11 +145,9 @@ def on_click():
     kingdomText1, phylumText1, classText1, orderText1, familyText1, genusText1, speciesText1 = make_taxo_list(name)
     kingdomText2, phylumText2, classText2, orderText2, familyText2, genusText2, speciesText2 = make_taxo_list(name2)
 
-
     kingdomLabel1.config(text = kingdomText1)
     kingdomLabel2.config(text = kingdomText2)
 
-    # ooooooh fun, comparison
     if (kingdomText1 != kingdomText2):
         kingdomLabel.config(foreground = "red")
         kingdomLabel1.config(foreground = "red")
@@ -208,8 +176,6 @@ def on_click():
         speciesLabel.config(foreground = "red")
         speciesLabel1.config(foreground = "red")
         speciesLabel2.config(foreground = "red")
-
-
 
     phylumLabel1.config(text = phylumText1)
     phylumLabel2.config(text = phylumText2)
@@ -245,7 +211,7 @@ def on_click():
 # Button widget
 Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4)
 
-# for King Philip labels
+# For King Philip labels
 kingdomLabel = Label(main_window, text = "")
 kingdomLabel.grid(row = 3, column = 0)
 phylumLabel = Label(main_window, text = "")
@@ -262,7 +228,7 @@ speciesLabel = Label(main_window, text = "")
 speciesLabel.grid(row = 9, column = 0)
 
 
-#### Individual text label boxes for each taxonomic level
+# Individual text label boxes for each taxonomic level
 kingdomLabel1 = Label(main_window, text = "")
 kingdomLabel1.grid(row = 3, column = 1)
 kingdomLabel2 = Label(main_window, text = "")
@@ -298,9 +264,7 @@ speciesLabel1.grid(row = 9, column = 1)
 speciesLabel2 = Label(main_window, text = "")
 speciesLabel2.grid(row = 9, column = 3)
 
-
-
-
+# Text box for blurb from Arek's service
 blurb1 = Label(main_window, text = "", wraplength=400)
 blurb1.grid(row = 11, column = 1)
 blurb2 = Label(main_window, text = "", wraplength=400)
