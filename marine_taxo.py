@@ -52,10 +52,39 @@ speciesText2 = ""
 ###########################
 def open_popup():
    top= Toplevel(main_window)
-   top.geometry("500x250")
+   top.geometry("405x405")
    top.title("Instructions")
-   Label(top, text= "What it does here").place(x=150,y=80)
+   information = "Welcome to the Marine Organism Taxonomic Comparison Tool! Using \
+taxonomic data from the World Register of Marine Species (WoRMS) and \
+pictures and introductory information from Wikipedia, we can compare any \
+two marine organisms you would like to know more about. Red text in \
+taxonomic trees indicates where the two species you are comparing diverge \
+in their phylogenies. Simply search for your organisms using their genus \
+and species names and click compare."
+   examples = "Not sure where to start? Try some favorites:"
+   herm = "Opalescent Nudibranch: Hermissenda crassicornis"
+   oyst = "Olympia Oyster: Ostrea lurida"
+   grtwht = "Greate White Shark: Carcharodon carcharias"
+   lngns = "Longnose Skate: Raja rhina"
+   seaotr = "Sea Otter: Enhydra lutris"
+   sealn = "California Sea Lion: Zalophus californianus"
+   orca = "Orca: Orcinus orca"
+   dlph = "Bottlenose Dolphin: Tursiops aduncus"
+   ane = "Green Anemone = Anthopleura xanthogrammica"
+   urch = "Purple Sea Urchin: Strongylocentrotus purpuratus"
 
+   Label(top, text= information, wraplength=400).grid(row = 0)
+   Label(top, text = examples).grid(row = 1)
+   Label(top, text = herm).grid(row = 2)
+   Label(top, text = oyst).grid(row = 3)
+   Label(top, text = grtwht).grid(row = 4)
+   Label(top, text = lngns).grid(row = 5)
+   Label(top, text = seaotr).grid(row = 6)
+   Label(top, text = sealn).grid(row = 7)
+   Label(top, text = orca).grid(row = 8)
+   Label(top, text = dlph).grid(row = 9)
+   Label(top, text = ane).grid(row = 10)
+   Label(top, text = urch).grid(row = 11)
 
 #################################
 
