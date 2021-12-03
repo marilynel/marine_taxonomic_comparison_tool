@@ -3,7 +3,16 @@ from PIL import ImageTk, Image
 import requests
 import json
 import urllib.parse
-#from difflib import SequenceMatcher
+import webbrowser
+from tkinter import ttk
+
+
+#Create an instance of Tkinter frame
+#win = Tk()
+#Set the geometry of Tkinter frame
+#win.geometry("750x270")
+
+
 
 
 ###########
@@ -39,6 +48,18 @@ speciesText1 = ""
 speciesText2 = ""
 
 
+
+###########################
+def open_popup():
+   top= Toplevel(main_window)
+   top.geometry("500x250")
+   top.title("Instructions")
+   Label(top, text= "What it does here").place(x=150,y=80)
+
+
+#################################
+
+
 # Input/search bars
 genus = Entry(main_window, width = 50, borderwidth = 5)
 genus.grid(row = 0, column = 1)
@@ -62,6 +83,7 @@ def make_taxo_list(name):
     family = ""
     genus = ""
     species = ""
+    wormsLinkUrl = ""
     response = requests.get(wormsUrl)
     if response.status_code == 200:
         orgData = response.json()
@@ -79,11 +101,11 @@ def make_taxo_list(name):
                 family = orgData[0][i]
             if i == 'genus':
                 genus = orgData[0][i]
-        return kingdom, phylum, classTaxo, order, family, genus, name
+            if i == 'url':
+                wormsLinkUrl = orgData[0][i]
+        return kingdom, phylum, classTaxo, order, family, genus, name, wormsLinkUrl
     else:
-        return "","","",f"{name} not found in database.","","",""
-
-
+        return "","","",f"{name} not found in database.","","","", "NA"
 
 # Function: clear search bars
 def clear_values():
@@ -127,13 +149,25 @@ def post_wiki_data(colNum, name):
         res = response.json()
         for i in res:
             if i == "intro":
-                infoStr = res[i]
+                infoStr = res[i].split("\n")[0]
                 break
         infoStr = re.sub('[\[][0-9]{,2}[\]]', '', infoStr)
     else:
         infoStr = f"No information found for {name}."
     return infoStr
 
+
+def callback(url):
+    webbrowser.open_new_tab(url)
+
+def wiki_learn_more(name):
+    return f"{name} on Wikipedia"
+
+def worms_learn_more(name):
+    return f"{name} on WoRMS"
+
+def wiki_url(name):
+    return f"https://en.wikipedia.org/wiki/{name}"
 
 # Function: callback function for clicking the search button
 def on_click():
@@ -142,8 +176,8 @@ def on_click():
     name = genus.get() + " " + spp.get()
     name2 = genus2.get() + " " + spp2.get()
 
-    kingdomText1, phylumText1, classText1, orderText1, familyText1, genusText1, speciesText1 = make_taxo_list(name)
-    kingdomText2, phylumText2, classText2, orderText2, familyText2, genusText2, speciesText2 = make_taxo_list(name2)
+    kingdomText1, phylumText1, classText1, orderText1, familyText1, genusText1, speciesText1, wormsUrl1 = make_taxo_list(name)
+    kingdomText2, phylumText2, classText2, orderText2, familyText2, genusText2, speciesText2, wormsUrl2 = make_taxo_list(name2)
 
     kingdomLabel1.config(text = kingdomText1)
     kingdomLabel2.config(text = kingdomText2)
@@ -152,30 +186,64 @@ def on_click():
         kingdomLabel.config(foreground = "red")
         kingdomLabel1.config(foreground = "red")
         kingdomLabel2.config(foreground = "red")
+    else:
+        kingdomLabel.config(foreground = "black")
+        kingdomLabel1.config(foreground = "black")
+        kingdomLabel2.config(foreground = "black")
+
     if (phylumText1 != phylumText2):
         phylumLabel.config(foreground = "red")
         phylumLabel1.config(foreground = "red")
         phylumLabel2.config(foreground = "red")
+    else:
+        phylumLabel.config(foreground = "black")
+        phylumLabel1.config(foreground = "black")
+        phylumLabel2.config(foreground = "black")
+
     if (classText1 != classText2):
         classLabel.config(foreground = "red")
         classLabel1.config(foreground = "red")
         classLabel2.config(foreground = "red")
+    else:
+        classLabel.config(foreground = "black")
+        classLabel1.config(foreground = "black")
+        classLabel2.config(foreground = "black")
+
     if (orderText1 != orderText2):
         orderLabel.config(foreground = "red")
         orderLabel1.config(foreground = "red")
         orderLabel2.config(foreground = "red")
+    else:
+        orderLabel.config(foreground = "black")
+        orderLabel1.config(foreground = "black")
+        orderLabel2.config(foreground = "black")
+
     if (familyText1 != familyText2):
         familyLabel.config(foreground = "red")
         familyLabel1.config(foreground = "red")
         familyLabel2.config(foreground = "red")
+    else:
+        familyLabel.config(foreground = "black")
+        familyLabel1.config(foreground = "black")
+        familyLabel2.config(foreground = "black")
+
     if (genusText1 != genusText2):
         genusLabel.config(foreground = "red")
         genusLabel1.config(foreground = "red")
         genusLabel2.config(foreground = "red")
+    else:
+        genusLabel.config(foreground = "black")
+        genusLabel1.config(foreground = "black")
+        genusLabel2.config(foreground = "black")
+
     if (speciesText1 != speciesText2):
         speciesLabel.config(foreground = "red")
         speciesLabel1.config(foreground = "red")
         speciesLabel2.config(foreground = "red")
+    else:
+        speciesLabel.config(foreground = "black")
+        speciesLabel1.config(foreground = "black")
+        speciesLabel2.config(foreground = "black")
 
     phylumLabel1.config(text = phylumText1)
     phylumLabel2.config(text = phylumText2)
@@ -190,7 +258,6 @@ def on_click():
     speciesLabel1.config(text = speciesText1)
     speciesLabel2.config(text = speciesText2)
 
-
     kingdomLabel.config(text="Kingdom:")
     phylumLabel.config(text="Phylum:")
     classLabel.config(text="Class:")
@@ -201,15 +268,36 @@ def on_click():
 
     clear_values()
 
-    blurb1.config(text = post_wiki_data(1, name))
-    blurb2.config(text = post_wiki_data(3, name2))
-
-    post_image(1, name)
-    post_image(3, name2)
-
+    if (wormsUrl1 != "NA"):
+        learnMore1.config(text = worms_learn_more(name), fg="blue", cursor="hand2")
+        learnMore1.bind("<Button-1>", lambda e: callback(wormsUrl1))
+        wiki_url1 = wiki_url(name)
+        if wiki_url != "NA":
+            learnMore3.config(text = wiki_learn_more(name), fg="blue", cursor="hand2")
+            learnMore3.bind("<Button-1>", lambda e: callback(wiki_url1))
+        post_image(1, name)
+        blurb1.config(text = post_wiki_data(1, name))
+    else:
+        post_image(1, "ijiadf")
+    if (wormsUrl2 != "NA"):
+        learnMore2.config(text = worms_learn_more(name2), fg="blue", cursor="hand2")
+        learnMore2.bind("<Button-1>", lambda e: callback(wormsUrl2))
+        wiki_url2 = wiki_url(name2)
+        if wiki_url2 != "NA":
+            learnMore4.config(text = wiki_learn_more(name2), fg="blue", cursor="hand2")
+            learnMore4.bind("<Button-1>", lambda e: callback(wiki_url2))
+        post_image(3, name2)
+        blurb2.config(text = post_wiki_data(3, name2))
+    else:
+        post_image(3, "ijiadf")
 
 # Button widget
-Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4)
+compareButton = Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4)
+compareButton = Button(main_window, text = "What's going on?", command = open_popup ).grid(row = 14, columnspan = 4)
+
+
+
+
 
 # For King Philip labels
 kingdomLabel = Label(main_window, text = "")
@@ -269,6 +357,19 @@ blurb1 = Label(main_window, text = "", wraplength=400)
 blurb1.grid(row = 11, column = 1)
 blurb2 = Label(main_window, text = "", wraplength=400)
 blurb2.grid(row = 11, column = 3)
+
+learnMore1 = Label(main_window, text = "")
+learnMore1.grid(row = 12, column = 1)
+
+learnMore2 = Label(main_window, text = "")
+learnMore2.grid(row = 12, column = 3)
+
+learnMore3 = Label(main_window, text = "")
+learnMore3.grid(row = 13, column = 1)
+
+learnMore4 = Label(main_window, text = "")
+learnMore4.grid(row = 13, column = 3)
+
 
 # Let's do this
 main_window.mainloop()
