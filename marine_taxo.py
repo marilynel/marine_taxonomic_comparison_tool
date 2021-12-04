@@ -6,21 +6,6 @@ import urllib.parse
 import webbrowser
 from tkinter import ttk
 
-
-#Create an instance of Tkinter frame
-#win = Tk()
-#Set the geometry of Tkinter frame
-#win.geometry("750x270")
-
-
-
-
-###########
-# TODO:
-# Wikipedia link
-# additional info?
-###########
-
 main_window = Tk()
 main_window.title("Marine Organism Taxonomic Comparison Tool")
 main_window.resizable(width = True, height = True)
@@ -47,9 +32,6 @@ genusText2 = ""
 speciesText1 = ""
 speciesText2 = ""
 
-
-
-###########################
 def open_popup():
    top= Toplevel(main_window)
    top.geometry("405x405")
@@ -86,9 +68,6 @@ and species names and click compare."
    Label(top, text = ane).grid(row = 10)
    Label(top, text = urch).grid(row = 11)
 
-#################################
-
-
 # Input/search bars
 genus = Entry(main_window, width = 50, borderwidth = 5)
 genus.grid(row = 0, column = 1)
@@ -116,7 +95,6 @@ def make_taxo_list(name):
     response = requests.get(wormsUrl)
     if response.status_code == 200:
         orgData = response.json()
-        # Parse returned JSON object for taxonomic data
         for i in orgData[0]:
             if i == 'kingdom':
                 kingdom = orgData[0][i]
@@ -143,7 +121,6 @@ def clear_values():
     spp.delete(0, END)
     spp2.delete(0, END)
 
-
 # Function: get image (my service)
 def post_image(colNum, name):
     scientificName = urllib.parse.quote_plus(name)
@@ -151,10 +128,8 @@ def post_image(colNum, name):
     imageServiceUrl = imageServiceUrl.format(scientificName)
     imgResponse = requests.get(imageServiceUrl)
     if imgResponse.status_code == 200:
-        # gets image from service and sets it up so tkinter can display it (including saving to local 'static' dir)
         print("Marilyn's image service for " + name)
         res = imgResponse.json()
-        # url of image is at: res['url']
         photoResponse = requests.get(res['url'])
         filename = "static/" + name + "." + res['url'].split(".")[-1]
         file = open(filename, "wb")
@@ -301,31 +276,32 @@ def on_click():
         learnMore1.config(text = worms_learn_more(name), fg="blue", cursor="hand2")
         learnMore1.bind("<Button-1>", lambda e: callback(wormsUrl1))
         wiki_url1 = wiki_url(name)
-        if wiki_url != "NA":
-            learnMore3.config(text = wiki_learn_more(name), fg="blue", cursor="hand2")
-            learnMore3.bind("<Button-1>", lambda e: callback(wiki_url1))
+        learnMore3.config(text = wiki_learn_more(name), fg="blue", cursor="hand2")
+        learnMore3.bind("<Button-1>", lambda e: callback(wiki_url1))
         post_image(1, name)
         blurb1.config(text = post_wiki_data(1, name))
     else:
         post_image(1, "ijiadf")
+        blurb1.config(text = f"Data on {name} unavailable.")
+        learnMore1.config(text = "")
+        learnMore3.config(text = "")
     if (wormsUrl2 != "NA"):
         learnMore2.config(text = worms_learn_more(name2), fg="blue", cursor="hand2")
         learnMore2.bind("<Button-1>", lambda e: callback(wormsUrl2))
         wiki_url2 = wiki_url(name2)
-        if wiki_url2 != "NA":
-            learnMore4.config(text = wiki_learn_more(name2), fg="blue", cursor="hand2")
-            learnMore4.bind("<Button-1>", lambda e: callback(wiki_url2))
+        learnMore4.config(text = wiki_learn_more(name2), fg="blue", cursor="hand2")
+        learnMore4.bind("<Button-1>", lambda e: callback(wiki_url2))
         post_image(3, name2)
         blurb2.config(text = post_wiki_data(3, name2))
     else:
         post_image(3, "ijiadf")
+        blurb2.config(text = f"Data on {name2} unavailable.")
+        learnMore2.config(text = "")
+        learnMore4.config(text = "")
 
 # Button widget
 compareButton = Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4)
-compareButton = Button(main_window, text = "What's going on?", command = open_popup ).grid(row = 14, columnspan = 4)
-
-
-
+compareButton = Button(main_window, text = "About", command = open_popup ).grid(row = 14, columnspan = 4)
 
 
 # For King Philip labels
