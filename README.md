@@ -1,3 +1,20 @@
+To run Marine Taxonomic Comparison Tool:
+
+Download relevant libraries:
+  pip install <library>
+including
+  tkinter
+  PIL
+  requests
+  json
+  urllib.parse
+  webbrowser
+  
+Run program with command:
+  python marine_taxo.py
+  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 For image getting service:
 
 Visit url: 
