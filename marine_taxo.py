@@ -52,7 +52,7 @@ and species names and click compare."
    sealn = "California Sea Lion: Zalophus californianus"
    orca = "Orca: Orcinus orca"
    dlph = "Bottlenose Dolphin: Tursiops aduncus"
-   ane = "Green Anemone = Anthopleura xanthogrammica"
+   ane = "Green Anemone: Anthopleura xanthogrammica"
    urch = "Purple Sea Urchin: Strongylocentrotus purpuratus"
 
    Label(top, text= information, wraplength=400).grid(row = 0)
