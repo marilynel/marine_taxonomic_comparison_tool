@@ -1,3 +1,15 @@
+################################################################################
+# TODO:
+# big gray space when first starting pgm --> window resize w starting pixel size?
+# make own wikipedia data scraper
+# image scraper --> get back the "main" images
+# change font size/boldness
+# make a web application (with flask) --> long term goal
+# add buttons for example organisms
+# make text "copyable"
+# show all taxonomic levels, not just preset ones --> look at json from worms
+################################################################################
+
 from tkinter import *
 from PIL import ImageTk, Image
 import requests
@@ -8,11 +20,13 @@ from tkinter import ttk
 
 main_window = Tk()
 main_window.title("Marine Organism Taxonomic Comparison Tool")
+#main_window.geometry("780x150")
 main_window.resizable(width = True, height = True)
 
+
 # Labels for search bars
-Label(main_window, text = "Genus 1:").grid(row = 0, column = 0)
-Label(main_window, text = "species 1:").grid(row = 1, column = 0)
+Label(main_window, text = "Genus 1:").grid(row = 0, column = 0, padx = 10)
+Label(main_window, text = "species 1:").grid(row = 1, column = 0, padx = 10)
 Label(main_window, text = "Genus 2:").grid(row = 0, column = 2)
 Label(main_window, text = "species 2:").grid(row = 1, column = 2)
 
@@ -300,80 +314,80 @@ def on_click():
         learnMore4.config(text = "")
 
 # Button widget
-compareButton = Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4)
-compareButton = Button(main_window, text = "About", command = open_popup ).grid(row = 14, columnspan = 4)
+compareButton = Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4, pady = 5)
+compareButton = Button(main_window, text = "About", command = open_popup ).grid(row = 3, columnspan = 4, pady = 5)
 
 
 # For King Philip labels
 kingdomLabel = Label(main_window, text = "")
-kingdomLabel.grid(row = 3, column = 0)
+kingdomLabel.grid(row = 4, column = 0)
 phylumLabel = Label(main_window, text = "")
-phylumLabel.grid(row = 4, column = 0)
+phylumLabel.grid(row = 5, column = 0)
 classLabel = Label(main_window, text = "")
-classLabel.grid(row = 5, column = 0)
+classLabel.grid(row = 6, column = 0)
 orderLabel = Label(main_window, text = "")
-orderLabel.grid(row = 6, column = 0)
+orderLabel.grid(row = 7, column = 0)
 familyLabel = Label(main_window, text = "")
-familyLabel.grid(row = 7, column = 0)
+familyLabel.grid(row = 8, column = 0)
 genusLabel = Label(main_window, text = "")
-genusLabel.grid(row = 8, column = 0)
+genusLabel.grid(row = 9, column = 0)
 speciesLabel = Label(main_window, text = "")
-speciesLabel.grid(row = 9, column = 0)
+speciesLabel.grid(row = 10, column = 0)
 
 
 # Individual text label boxes for each taxonomic level
 kingdomLabel1 = Label(main_window, text = "")
-kingdomLabel1.grid(row = 3, column = 1)
+kingdomLabel1.grid(row = 4, column = 1)
 kingdomLabel2 = Label(main_window, text = "")
-kingdomLabel2.grid(row = 3, column = 3)
+kingdomLabel2.grid(row = 4, column = 3)
 
 phylumLabel1 = Label(main_window, text = "")
-phylumLabel1.grid(row = 4, column = 1)
+phylumLabel1.grid(row = 5, column = 1)
 phylumLabel2 = Label(main_window, text = "")
-phylumLabel2.grid(row = 4, column = 3)
+phylumLabel2.grid(row = 5, column = 3)
 
 classLabel1 = Label(main_window, text = "")
-classLabel1.grid(row = 5, column = 1)
+classLabel1.grid(row = 6, column = 1)
 classLabel2 = Label(main_window, text = "")
-classLabel2.grid(row = 5, column = 3)
+classLabel2.grid(row = 6, column = 3)
 
 orderLabel1 = Label(main_window, text = "")
-orderLabel1.grid(row = 6, column = 1)
+orderLabel1.grid(row = 7, column = 1)
 orderLabel2 = Label(main_window, text = "")
-orderLabel2.grid(row = 6, column = 3)
+orderLabel2.grid(row = 7, column = 3)
 
 familyLabel1 = Label(main_window, text = "")
-familyLabel1.grid(row = 7, column = 1)
+familyLabel1.grid(row = 8, column = 1)
 familyLabel2 = Label(main_window, text = "")
-familyLabel2.grid(row = 7, column = 3)
+familyLabel2.grid(row = 8, column = 3)
 
 genusLabel1 = Label(main_window, text = "")
-genusLabel1.grid(row = 8, column = 1)
+genusLabel1.grid(row = 9, column = 1)
 genusLabel2 = Label(main_window, text = "")
-genusLabel2.grid(row = 8, column = 3)
+genusLabel2.grid(row = 9, column = 3)
 
 speciesLabel1 = Label(main_window, text = "")
-speciesLabel1.grid(row = 9, column = 1)
+speciesLabel1.grid(row = 10, column = 1)
 speciesLabel2 = Label(main_window, text = "")
-speciesLabel2.grid(row = 9, column = 3)
+speciesLabel2.grid(row = 10, column = 3)
 
 # Text box for blurb from Arek's service
 blurb1 = Label(main_window, text = "", wraplength=400)
-blurb1.grid(row = 11, column = 1)
+blurb1.grid(row = 12, column = 1)
 blurb2 = Label(main_window, text = "", wraplength=400)
-blurb2.grid(row = 11, column = 3)
+blurb2.grid(row = 12, column = 3)
 
 learnMore1 = Label(main_window, text = "")
-learnMore1.grid(row = 12, column = 1)
+learnMore1.grid(row = 13, column = 1)
 
 learnMore2 = Label(main_window, text = "")
-learnMore2.grid(row = 12, column = 3)
+learnMore2.grid(row = 13, column = 3)
 
 learnMore3 = Label(main_window, text = "")
-learnMore3.grid(row = 13, column = 1)
+learnMore3.grid(row = 14, column = 1)
 
 learnMore4 = Label(main_window, text = "")
-learnMore4.grid(row = 13, column = 3)
+learnMore4.grid(row = 14, column = 3)
 
 
 # Let's do this
