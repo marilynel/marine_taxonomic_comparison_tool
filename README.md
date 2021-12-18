@@ -1,8 +1,22 @@
-To run Marine Taxonomic Comparison Tool:
+The Marine Taxonomic Comparison Tool
 
-Download relevant libraries:
-  pip install <library>
-including
+----------------------------------------------------------------------------------------------------------------------------------------
+
+The Marine Taxonomic Comparison Tool is an application that utilizes data from both the World Register of Marine Species (WoRMS) and 
+Wikipedia. WoRMS is a wonderful and accurate resource, but it contains a lot of specific and esoteric information that may be a bit much 
+for a casual marine biology enthusiast or young student. It also only allows you to examine one organism at a time, and does not allow 
+for comparison. This application gleans and displays the most relevant taxonomic information from WoRMS in a way that is easy to 
+understand, listing Kingdom, phylum, class, order, family, genus, and species, and displays with it a picture of the organism with an 
+introductory blurb (both from Wikipedia). This tool also color-codes the taxonomic data, drawing the user’s eye to where in the family 
+tree-of-life your two organisms diverge from each other.
+
+To run the application, download the relevant libraries (listed below) using the pip package installer. Python 3 is needed to run the 
+application. 
+
+Run program with command:
+  python marine_taxo.py
+  
+Necessary Libraries:
   - tkinter
   - PIL
   - requests
