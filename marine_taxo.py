@@ -3,6 +3,7 @@
 # big gray space when first starting pgm --> window resize w starting pixel size?
 # make own wikipedia data scraper
 # image scraper --> get back the "main" images
+#       alternate: get image from another source??
 # change font size/boldness
 # make a web application (with flask) --> long term goal
 # add buttons for example organisms
@@ -93,6 +94,11 @@ genus2.grid(row = 0, column = 3)
 spp2 = Entry(main_window, width = 50, borderwidth = 5)
 spp2.grid(row = 1, column = 3)
 
+# Function: process input (strip whitespace, capitalize)
+def process_input(name):
+    return name.strip()
+
+
 # Function: Get taxonomic data of organism
 def make_taxo_list(name):
     scientificName = urllib.parse.quote_plus(name)
@@ -109,6 +115,7 @@ def make_taxo_list(name):
     response = requests.get(wormsUrl)
     if response.status_code == 200:
         orgData = response.json()
+        print(orgData)
         for i in orgData[0]:
             if i == 'kingdom':
                 kingdom = orgData[0][i]
@@ -153,7 +160,7 @@ def post_image(colNum, name):
         photo = ImageTk.PhotoImage(image)
         label = Label(main_window, image = photo)
         label.image = photo
-        label.grid(row=10, column = colNum)
+        label.grid(row=11, column = colNum)
 
 # Function: get data (Arek's service)
 def post_wiki_data(colNum, name):
@@ -191,8 +198,10 @@ def wiki_url(name):
 def on_click():
     global kingdomText1, kingdomText2, phylumText1, phylumText2, classText1, classText2, orderText1, orderText2, familyText1, familyText2, genusText1, genusText2, speciesText1, speciesText2
 
-    name = genus.get() + " " + spp.get()
-    name2 = genus2.get() + " " + spp2.get()
+    name = process_input(genus.get()) + " " + process_input(spp.get())
+    name = name[0].upper() + name[1:]
+    name2 = process_input(genus2.get()) + " " + process_input(spp2.get())
+    name2 = name2[0].upper() + name2[1:]
 
     kingdomText1, phylumText1, classText1, orderText1, familyText1, genusText1, speciesText1, wormsUrl1 = make_taxo_list(name)
     kingdomText2, phylumText2, classText2, orderText2, familyText2, genusText2, speciesText2, wormsUrl2 = make_taxo_list(name2)
