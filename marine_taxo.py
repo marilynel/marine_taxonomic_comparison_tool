@@ -6,12 +6,13 @@
 #       alternate: get image from another source??
 # change font size/boldness
 # make a web application (with flask) --> long term goal
-# add buttons for example organisms
+
 # make text "copyable"
 # show all taxonomic levels, not just preset ones --> look at json from worms
 ################################################################################
 
 from tkinter import *
+import tkinter as tk
 from PIL import ImageTk, Image
 import requests
 import json
@@ -19,17 +20,43 @@ import urllib.parse
 import webbrowser
 from tkinter import ttk
 
-main_window = Tk()
+main_window = tk.Tk()
 main_window.title("Marine Organism Taxonomic Comparison Tool")
 #main_window.geometry("780x150")
 main_window.resizable(width = True, height = True)
 
 
 # Labels for search bars
-Label(main_window, text = "Genus 1:").grid(row = 0, column = 0, padx = 10)
-Label(main_window, text = "species 1:").grid(row = 1, column = 0, padx = 10)
-Label(main_window, text = "Genus 2:").grid(row = 0, column = 2)
-Label(main_window, text = "species 2:").grid(row = 1, column = 2)
+#Label(main_window, text = "Genus 1:").grid(row = 0, column = 0, padx = 10)
+ttk.Label(main_window, text = "Genus 1:").grid(row = 0, column = 0, padx = 10, pady = 5)
+#Label(main_window, text = "species 1:").grid(row = 1, column = 0, padx = 10)
+ttk.Label(main_window, text = "species 1:").grid(row = 1, column = 0, padx = 10)
+#Label(main_window, text = "Genus 2:").grid(row = 0, column = 2)
+ttk.Label(main_window, text = "Genus 2:").grid(row = 0, column = 2, pady = 5)
+#Label(main_window, text = "species 2:").grid(row = 1, column = 2)
+ttk.Label(main_window, text = "species 2:").grid(row = 1, column = 2)
+
+a = tk.StringVar()
+b = tk.StringVar()
+genus = ttk.Combobox(main_window, width = 50, textvariable = a)
+genus2 = ttk.Combobox(main_window, width = 50, textvariable = b)
+genus['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus' 'Triopha', 'Zalophus' )
+genus2['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus' 'Triopha', 'Zalophus' )
+genus.grid(row = 0, column = 1)
+genus2.grid(row =0, column = 3)
+genus.current()
+genus2.current()
+
+c = tk.StringVar()
+d = tk.StringVar()
+spp = ttk.Combobox(main_window, width = 50, textvariable = c)
+spp2 = ttk.Combobox(main_window, width = 50, textvariable = d)
+spp['values'] = ('lutris', 'iodinea', 'crassicornis', 'orca', 'catalinae', 'californianus' )
+spp2['values'] = ('lutris', 'iodinea', 'crassicornis', 'orca', 'catalinae', 'californianus' )
+spp.grid(row = 1, column = 1)
+spp2.grid(row = 1, column = 3)
+spp.current()
+spp2.current()
 
 # For printing text to gui later; may not be needed?
 kingdomText1 = ""
@@ -49,7 +76,8 @@ speciesText2 = ""
 
 def open_popup():
    top= Toplevel(main_window)
-   top.geometry("405x405")
+   #top.geometry("400x430")
+   top.resizable(width = True, height = True)
    top.title("Instructions")
    information = "Welcome to the Marine Organism Taxonomic Comparison Tool! Using \
 taxonomic data from the World Register of Marine Species (WoRMS) and \
@@ -58,7 +86,8 @@ two marine organisms you would like to know more about. Red text in \
 taxonomic trees indicates where the two species you are comparing diverge \
 in their phylogenies. Simply search for your organisms using their genus \
 and species names and click compare."
-   examples = "Not sure where to start? Try some favorites:"
+   examples = "Not sure where to start? Pick some from the drop down menus or try \
+some favorites:"
    herm = "Opalescent Nudibranch: Hermissenda crassicornis"
    oyst = "Olympia Oyster: Ostrea lurida"
    grtwht = "Greate White Shark: Carcharodon carcharias"
@@ -84,15 +113,15 @@ and species names and click compare."
    Label(top, text = urch).grid(row = 11)
 
 # Input/search bars
-genus = Entry(main_window, width = 50, borderwidth = 5)
-genus.grid(row = 0, column = 1)
-spp = Entry(main_window, width = 50, borderwidth = 5)
-spp.grid(row = 1, column = 1)
+#genus = Entry(main_window, width = 50, borderwidth = 5)
+##genus.grid(row = 0, column = 1)
+#spp = Entry(main_window, width = 50, borderwidth = 5)
+#spp.grid(row = 1, column = 1)
 
-genus2 = Entry(main_window, width = 50, borderwidth = 5)
-genus2.grid(row = 0, column = 3)
-spp2 = Entry(main_window, width = 50, borderwidth = 5)
-spp2.grid(row = 1, column = 3)
+#genus2 = Entry(main_window, width = 50, borderwidth = 5)
+#genus2.grid(row = 0, column = 3)
+#spp2 = Entry(main_window, width = 50, borderwidth = 5)
+#spp2.grid(row = 1, column = 3)
 
 # Function: process input (strip whitespace, capitalize)
 def process_input(name):
@@ -324,7 +353,7 @@ def on_click():
 
 # Button widget
 compareButton = Button(main_window, text = "Compare", command = on_click ).grid(row = 2, columnspan = 4, pady = 5)
-compareButton = Button(main_window, text = "About", command = open_popup ).grid(row = 3, columnspan = 4, pady = 5)
+aboutButton = Button(main_window, text = "About", command = open_popup ).grid(row = 3, columnspan = 4)
 
 
 # For King Philip labels
