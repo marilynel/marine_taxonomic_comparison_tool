@@ -38,8 +38,8 @@ genus = ttk.Combobox(main_window, width = 50, textvariable = a)
 spp = ttk.Combobox(main_window, width = 50, textvariable = c)
 genus2 = ttk.Combobox(main_window, width = 50, textvariable = b)
 spp2 = ttk.Combobox(main_window, width = 50, textvariable = d)
-genus['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus' 'Triopha', 'Zalophus' )
-genus2['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus' 'Triopha', 'Zalophus' )
+genus['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
+genus2['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
 genus.grid(row = 0, column = 1)
 genus2.grid(row =0, column = 3)
 genus.focus()
@@ -171,6 +171,10 @@ def post_image(colNum, name):
         label = Label(main_window, image = photo)
         label.image = photo
         label.grid(row=11, column = colNum)
+
+def clear_wiki_data(colNum, name):
+    return ""
+
 
 # Function: get data (Arek's service)
 def post_wiki_data(colNum, name):
@@ -304,17 +308,19 @@ def on_click():
     speciesLabel.config(text="Species:")
 
     clear_values()
-
+    post_image(1, name)
+    post_image(3, name2)
     if (wormsUrl1 != "NA"):
         learnMore1.config(text = worms_learn_more(name), fg="blue", cursor="hand2")
         learnMore1.bind("<Button-1>", lambda e: callback(wormsUrl1))
         wiki_url1 = wiki_url(name)
         learnMore3.config(text = wiki_learn_more(name), fg="blue", cursor="hand2")
         learnMore3.bind("<Button-1>", lambda e: callback(wiki_url1))
-        post_image(1, name)
+        #post_image(1, name)
+        blurb1.config(text = "")
         blurb1.config(text = post_wiki_data(1, name))
     else:
-        post_image(1, "ijiadf")
+        #post_image(1, "ijiadf")
         blurb1.config(text = f"Data on {name} unavailable.")
         learnMore1.config(text = "")
         learnMore3.config(text = "")
@@ -324,10 +330,11 @@ def on_click():
         wiki_url2 = wiki_url(name2)
         learnMore4.config(text = wiki_learn_more(name2), fg="blue", cursor="hand2")
         learnMore4.bind("<Button-1>", lambda e: callback(wiki_url2))
-        post_image(3, name2)
+        #post_image(3, name2)
+        blurb2.config(text = "")
         blurb2.config(text = post_wiki_data(3, name2))
     else:
-        post_image(3, "ijiadf")
+        #post_image(3, "ijiadf")
         blurb2.config(text = f"Data on {name2} unavailable.")
         learnMore2.config(text = "")
         learnMore4.config(text = "")
