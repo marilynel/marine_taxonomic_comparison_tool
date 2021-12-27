@@ -23,6 +23,7 @@ Necessary Libraries:
   - json
   - urllib.parse
   - webbrowser
+Some installations may require a manual installation of the re library to run as well.
   
 Run program with command:
   python marine_taxo.py
