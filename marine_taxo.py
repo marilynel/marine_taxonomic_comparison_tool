@@ -18,11 +18,13 @@ import urllib.parse
 import webbrowser
 from tkinter import ttk
 
+## NEW
+import os
+
 main_window = tk.Tk()
 main_window.title("Marine Organism Taxonomic Comparison Tool")
 #main_window.geometry("780x150")
 main_window.resizable(width = True, height = True)
-
 
 # Labels for search bars
 ttk.Label(main_window, text = "Genus 1:").grid(row = 0, column = 0, padx = 10, pady = 5)
@@ -38,6 +40,14 @@ genus = ttk.Combobox(main_window, width = 50, textvariable = a)
 spp = ttk.Combobox(main_window, width = 50, textvariable = c)
 genus2 = ttk.Combobox(main_window, width = 50, textvariable = b)
 spp2 = ttk.Combobox(main_window, width = 50, textvariable = d)
+
+#category = {'Enhydra': ['lutris'],
+#    'Hermissenda': ['crassicornis','opalescens'],
+#    'Orcinus':['orca'],
+#    'Triopha':['catalinae','maculata'],
+#    'Zalophus':['californianus','wollebaeki']}
+
+
 genus['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
 genus2['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
 genus.grid(row = 0, column = 1)
@@ -47,6 +57,7 @@ genus.current()
 genus2.current()
 spp['values'] = ('lutris', 'iodinea', 'crassicornis', 'orca', 'catalinae', 'californianus' )
 spp2['values'] = ('lutris', 'iodinea', 'crassicornis', 'orca', 'catalinae', 'californianus' )
+
 spp.grid(row = 1, column = 1)
 spp2.grid(row = 1, column = 3)
 spp.current()
@@ -165,6 +176,10 @@ def post_image(colNum, name):
         filename = "static/" + name + "." + res['url'].split(".")[-1]
         file = open(filename, "wb")
         file.write(photoResponse.content)
+        if os.path.getsize(filename) == 0:
+            print("ok")
+            post_image(colNum, 'tgrdfgsdf')
+            return
         image = Image.open(filename)
         image = image.resize((300,200), Image.ANTIALIAS)
         photo = ImageTk.PhotoImage(image)
