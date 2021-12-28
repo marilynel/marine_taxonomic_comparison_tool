@@ -21,10 +21,23 @@ from tkinter import ttk
 ## NEW
 import os
 
+# Function: process input (strip whitespace, capitalize)
+def process_input(name):
+    return name.strip()
+
+
+
 main_window = tk.Tk()
 main_window.title("Marine Organism Taxonomic Comparison Tool")
 #main_window.geometry("780x150")
 main_window.resizable(width = True, height = True)
+
+category = {'Enhydra': ['lutris'],
+    'Hermissenda': ['crassicornis','opalescens'],
+    'Orcinus':['orca'],
+    'Triopha':['catalinae','maculata'],
+    'Zalophus':['californianus','wollebaeki']}
+
 
 # Labels for search bars
 ttk.Label(main_window, text = "Genus 1:").grid(row = 0, column = 0, padx = 10, pady = 5)
@@ -36,26 +49,41 @@ a = tk.StringVar()
 b = tk.StringVar()
 c = tk.StringVar()
 d = tk.StringVar()
-genus = ttk.Combobox(main_window, width = 50, textvariable = a)
-spp = ttk.Combobox(main_window, width = 50, textvariable = c)
+genus = ttk.Combobox(width = 50,  values = list(category.keys()))
+#genus = ttk.Combobox(main_window, width = 50, textvariable = a)
+#spp = ttk.Combobox(main_window, width = 50, textvariable = c)
+spp = ttk.Combobox(width = 50)
 genus2 = ttk.Combobox(main_window, width = 50, textvariable = b)
 spp2 = ttk.Combobox(main_window, width = 50, textvariable = d)
 
-#category = {'Enhydra': ['lutris'],
-#    'Hermissenda': ['crassicornis','opalescens'],
-#    'Orcinus':['orca'],
-#    'Triopha':['catalinae','maculata'],
-#    'Zalophus':['californianus','wollebaeki']}
 
 
-genus['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
-genus2['values'] = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
+#genusOptions = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus')
+#enhydraSpp = ('lutris')
+#flabellinaSpp = ('iodinea')
+#hermissendaSpp = ('crassicornis','opalescens')
+#orcinusSpp = ('orca')
+#triophaSpp = ('catalinae','maculata')
+#zalophusSpp = ('californianus','wollebaeki')
+
+def getUpdateData(event):
+    print("ok")
+    #print(genus.get())
+    #spp['values'] = category[genus.get()]
+
+
+#genus['values'] = genusOptions  #('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
+#genus2['values'] = genusOptions #('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
 genus.grid(row = 0, column = 1)
 genus2.grid(row =0, column = 3)
 genus.focus()
 genus.current()
 genus2.current()
-spp['values'] = ('lutris', 'iodinea', 'crassicornis', 'orca', 'catalinae', 'californianus' )
+###### evaluate if enhydra is in genus box
+genus.bind('<<ComboboxSelected>>', getUpdateData)
+
+
+
 spp2['values'] = ('lutris', 'iodinea', 'crassicornis', 'orca', 'catalinae', 'californianus' )
 
 spp.grid(row = 1, column = 1)
@@ -116,9 +144,7 @@ some favorites:"
    Label(top, text = ane).grid(row = 10)
    Label(top, text = urch).grid(row = 11)
 
-# Function: process input (strip whitespace, capitalize)
-def process_input(name):
-    return name.strip()
+
 
 
 # Function: Get taxonomic data of organism
