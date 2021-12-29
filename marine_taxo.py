@@ -45,46 +45,26 @@ ttk.Label(main_window, text = "species 1:").grid(row = 1, column = 0, padx = 10)
 ttk.Label(main_window, text = "Genus 2:").grid(row = 0, column = 2, pady = 5)
 ttk.Label(main_window, text = "species 2:").grid(row = 1, column = 2)
 
-a = tk.StringVar()
-b = tk.StringVar()
-c = tk.StringVar()
-d = tk.StringVar()
 genus = ttk.Combobox(width = 50,  values = list(category.keys()))
-#genus = ttk.Combobox(main_window, width = 50, textvariable = a)
-#spp = ttk.Combobox(main_window, width = 50, textvariable = c)
 spp = ttk.Combobox(width = 50)
-genus2 = ttk.Combobox(main_window, width = 50, textvariable = b)
-spp2 = ttk.Combobox(main_window, width = 50, textvariable = d)
+genus2 = ttk.Combobox(width = 50,  values = list(category.keys()))
+spp2 = ttk.Combobox(width = 50)
 
 
-
-#genusOptions = ('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus')
-#enhydraSpp = ('lutris')
-#flabellinaSpp = ('iodinea')
-#hermissendaSpp = ('crassicornis','opalescens')
-#orcinusSpp = ('orca')
-#triophaSpp = ('catalinae','maculata')
-#zalophusSpp = ('californianus','wollebaeki')
-
-def getUpdateData(event):
-    print("ok")
-    #print(genus.get())
-    #spp['values'] = category[genus.get()]
+def getUpdateData1(event):
+    spp['values'] = category[genus.get()]
+def getUpdateData2(event):
+    spp2['values'] = category[genus2.get()]
 
 
-#genus['values'] = genusOptions  #('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
-#genus2['values'] = genusOptions #('Enhydra', 'Flabellina', 'Hermissenda', 'Orcinus', 'Triopha', 'Zalophus' )
 genus.grid(row = 0, column = 1)
 genus2.grid(row =0, column = 3)
 genus.focus()
 genus.current()
 genus2.current()
-###### evaluate if enhydra is in genus box
-genus.bind('<<ComboboxSelected>>', getUpdateData)
+genus.bind('<<ComboboxSelected>>', getUpdateData1)
+genus2.bind('<<ComboboxSelected>>', getUpdateData2)
 
-
-
-spp2['values'] = ('lutris', 'iodinea', 'crassicornis', 'orca', 'catalinae', 'californianus' )
 
 spp.grid(row = 1, column = 1)
 spp2.grid(row = 1, column = 3)
