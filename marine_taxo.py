@@ -6,7 +6,7 @@
 # image scraper --> get back the "main" images
 #       alternate: get image from another source??
 # make a web application (with flask) --> long term goal
-# make text "copyable"
+# adjust posted image size
 ################################################################################
 
 from tkinter import *
@@ -32,11 +32,18 @@ main_window.title("Marine Organism Taxonomic Comparison Tool")
 #main_window.geometry("780x150")
 main_window.resizable(width = True, height = True)
 
-category = {'Enhydra': ['lutris'],
-    'Hermissenda': ['crassicornis','opalescens'],
+category = {'Anthopleura': ['artemisia','elegantissima','michaelseni','rosea','xanthogrammica'],
+    'Carcharodon': ['carcharias'],
+    'Enhydra': ['lutris'],
+    'Flabellina': ['affinis','dana','engeli','iodinea','rubrolineata'],
+    'Hermissenda': ['crassicornis','emurai', 'opalescens'],
+    'Magallana':['ariakensis','bilineata','gigas'],
     'Orcinus':['orca'],
+    'Ostrea':['angasi', 'chilensis', 'conchaphila', 'edulis','lurida'],
+    'Raja':['binoculata','pulchra','rhina','stellulata'],
     'Triopha':['catalinae','maculata'],
-    'Zalophus':['californianus','wollebaeki']}
+    'Tursiops': ['aduncus','truncatus'],
+    'Zalophus':['californianus','japonicus', 'wollebaeki']}
 
 
 # Labels for search bars
@@ -100,32 +107,19 @@ in their phylogenies. Simply search for your organisms using their genus \
 and species names and click compare."
    examples = "Not sure where to start? Pick some from the drop down menus or try \
 some favorites:"
-   herm = "Opalescent Nudibranch: Hermissenda crassicornis"
-   oyst = "Olympia Oyster: Ostrea lurida"
-   grtwht = "Greate White Shark: Carcharodon carcharias"
-   lngns = "Longnose Skate: Raja rhina"
-   seaotr = "Sea Otter: Enhydra lutris"
-   sealn = "California Sea Lion: Zalophus californianus"
-   orca = "Orca: Orcinus orca"
-   dlph = "Bottlenose Dolphin: Tursiops aduncus"
-   ane = "Green Anemone: Anthopleura xanthogrammica"
-   urch = "Purple Sea Urchin: Strongylocentrotus purpuratus"
 
    Label(top, text= information, wraplength=400).grid(row = 0)
    Label(top, text = examples).grid(row = 1)
-   Label(top, text = herm).grid(row = 2)
-   Label(top, text = oyst).grid(row = 3)
-   Label(top, text = grtwht).grid(row = 4)
-   Label(top, text = lngns).grid(row = 5)
-   Label(top, text = seaotr).grid(row = 6)
-   Label(top, text = sealn).grid(row = 7)
-   Label(top, text = orca).grid(row = 8)
-   Label(top, text = dlph).grid(row = 9)
-   Label(top, text = ane).grid(row = 10)
-   Label(top, text = urch).grid(row = 11)
-
-
-
+   Label(top, text = "Opalescent Nudibranch: Hermissenda crassicornis").grid(row = 2)
+   Label(top, text = "Olympia Oyster: Ostrea lurida").grid(row = 3)
+   Label(top, text = "Great White Shark: Carcharodon carcharias").grid(row = 4)
+   Label(top, text = "Longnose Skate: Raja rhina").grid(row = 5)
+   Label(top, text = "Sea Otter: Enhydra lutris").grid(row = 6)
+   Label(top, text = "California Sea Lion: Zalophus californianus").grid(row = 7)
+   Label(top, text = "Orca: Orcinus orca").grid(row = 8)
+   Label(top, text = "Bottlenose Dolphin: Tursiops aduncus").grid(row = 9)
+   Label(top, text = "Green Anemone: Anthopleura xanthogrammica").grid(row = 10)
+   Label(top, text = "Purple Sea Urchin: Strongylocentrotus purpuratus").grid(row = 11)
 
 # Function: Get taxonomic data of organism
 def make_taxo_list(name):
