@@ -17,9 +17,8 @@ import json
 import urllib.parse
 import webbrowser
 from tkinter import ttk
+from flask import Flask
 
-## NEW
-import os
 
 # Function: process input (strip whitespace, capitalize)
 def process_input(name):
@@ -430,6 +429,16 @@ learnMore3.grid(row = 14, column = 1)
 learnMore4 = Label(main_window, text = "")
 learnMore4.grid(row = 14, column = 3)
 
+# beginning flask implementation
+app = Flask(__name__)
+@app.route('/')
+def index():
+    return "hello world"
 
-# Let's do this
-main_window.mainloop()
+# if a number is passed as a command line argument, this goes thru Flask
+# else, use the tkinter implementation
+if len(sys.argv) == 2:
+    port = int(sys.argv[1])
+    app.run(host = '0.0.0.0', port = port)
+else:
+    main_window.mainloop()
