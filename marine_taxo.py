@@ -431,9 +431,62 @@ learnMore4.grid(row = 14, column = 3)
 
 # beginning flask implementation
 app = Flask(__name__)
+
+mainPage = '''
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <style>
+            body {{background-color: seagreen;}}
+            h1 {{text-align: center;}}
+            table, th, td {{border: 1px solid black; border-collapse: collapse;}}
+            td {{width: 500px;}}
+            .center {{margin-left: auto; margin-right: auto;}}
+        </style>
+    </head>
+    <body>
+        <h1>Marine Taxonomic Comparison Tool</h1>
+        <form action="/compare">
+            <table class="center">
+                <tr>
+                    <td>
+                        <label for="genus1">Genus 1:</label>
+                        <input type="text" id="genus1" name="genus1"></input>
+                    </td>
+                    <td>
+                        <label for="genus2">Genus 2:</label>
+                        <input type="text" id="genus2" name="genus2"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="spp1">Species 1:</label>
+                        <input type="text" id="spp1" name="spp1"></input>
+                    </td>
+                    <td>
+                        <label for="spp2">Species 2:</label>
+                        <input type="text" id="spp2" name="spp2"></input>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+            </table>
+            <input class="center" type="button" value="Compare"></input>
+            <input class="center" type="button" value="About"></input>
+        </form>
+        {extra}
+    </body>
+</html>
+
+'''.format(extra="<p>results of comparison will go here somehow</p>")
+
+
+
+
 @app.route('/')
 def index():
-    return "hello world"
+    return mainPage
 
 # if a number is passed as a command line argument, this goes thru Flask
 # else, use the tkinter implementation
