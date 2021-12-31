@@ -334,7 +334,6 @@ def on_click():
         blurb1.config(text = "")
         blurb1.config(text = post_wiki_data(1, name))
     else:
-        #post_image(1, "ijiadf")
         blurb1.config(text = f"Data on {name} unavailable.")
         learnMore1.config(text = "")
         learnMore3.config(text = "")
@@ -344,11 +343,9 @@ def on_click():
         wiki_url2 = wiki_url(name2)
         learnMore4.config(text = wiki_learn_more(name2), fg="blue", cursor="hand2")
         learnMore4.bind("<Button-1>", lambda e: callback(wiki_url2))
-        #post_image(3, name2)
         blurb2.config(text = "")
         blurb2.config(text = post_wiki_data(3, name2))
     else:
-        #post_image(3, "ijiadf")
         blurb2.config(text = f"Data on {name2} unavailable.")
         learnMore2.config(text = "")
         learnMore4.config(text = "")
@@ -432,6 +429,21 @@ learnMore4.grid(row = 14, column = 3)
 # beginning flask implementation
 app = Flask(__name__)
 
+
+# TODO:
+# associate "compare" button with this function
+def getNames(request):
+    if request.method == "POST":
+       # getting input with name = fname in HTML form
+       genus1 = request.form.get("genus1")
+       genus2 = request.form.get("genus2")
+       spp1 = request.form.get("spp1")
+       spp2 = request.form.get("spp2")
+       print ("Species 1 is "+genus1 + spp1 +" and species 2 is "+genus2+spp2)
+    #return render_template("form.html")
+
+
+
 mainPage = '''
 <!DOCTYPE html>
 <html>
@@ -440,33 +452,51 @@ mainPage = '''
         <style>
             body {{background-color: seagreen;}}
             h1 {{text-align: center;}}
-            table, th, td {{border: 1px solid black; border-collapse: collapse;}}
+            th, td {{border: 1px solid black; border-collapse: collapse;}}
             td {{width: 500px;}}
-            .center {{margin-left: auto; margin-right: auto;}}
+            .center {{margin-left: auto; margin-right: auto; display: flex; justify-content: center; align-items: center;}}
+            .inputClass {{display: inline-block;}}
+            .tableElements {{width: 100%;}}
         </style>
     </head>
     <body>
         <h1>Marine Taxonomic Comparison Tool</h1>
-        <form action="/compare">
+        <form action="/compare" method="post">
             <table class="center">
                 <tr>
-                    <td>
-                        <label for="genus1">Genus 1:</label>
-                        <input type="text" id="genus1" name="genus1"></input>
+                    <td class="tableElements species1">
+                        <div>
+                            <label for="genus1">Genus 1:</label>
+                        </div>
+                        <div>
+                            <input type="text" id="genus1" name="genus1" class="inputClass"></input>
+                        </div>
                     </td>
-                    <td>
-                        <label for="genus2">Genus 2:</label>
-                        <input type="text" id="genus2" name="genus2"></input>
+                    <td class="tableElements species2">
+                        <div>
+                            <label for="genus2">Genus 2:</label>
+                        </div>
+                        <div>
+                            <input type="text" id="genus2" name="genus2" class="inputClass"></input>
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <label for="spp1">Species 1:</label>
-                        <input type="text" id="spp1" name="spp1"></input>
+                    <td class="tableElements species1">
+                        <div>
+                            <label for="spp1">Species 1:</label>
+                        </div>
+                        <div>
+                            <input type="text" id="spp1" name="spp1" class="inputClass"></input>
+                        </div>
                     </td>
-                    <td>
-                        <label for="spp2">Species 2:</label>
-                        <input type="text" id="spp2" name="spp2"></input>
+                    <td class="tableElements species2">
+                        <div>
+                            <label for="spp2">Species 2:</label>
+                        </div>
+                        <div>
+                            <input type="text" id="spp2" name="spp2" class="inputClass"></input>
+                        </div>
                     </td>
                 </tr>
                 <tr></tr>
@@ -479,12 +509,18 @@ mainPage = '''
     </body>
 </html>
 
-'''.format(extra="<p>results of comparison will go here somehow</p>")
+'''.format(extra=getNames)
 
 
 
 
-@app.route('/')
+@app.route('/', methods =["GET", "POST"])
+
+
+
+
+
+
 def index():
     return mainPage
 
