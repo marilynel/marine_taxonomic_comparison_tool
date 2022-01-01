@@ -18,6 +18,7 @@ import urllib.parse
 import webbrowser
 from tkinter import ttk
 from flask import Flask
+from flask import request
 
 
 # Function: process input (strip whitespace, capitalize)
@@ -432,14 +433,18 @@ app = Flask(__name__)
 
 # TODO:
 # associate "compare" button with this function
-def getNames(request):
-    if request.method == "POST":
-       # getting input with name = fname in HTML form
-       genus1 = request.form.get("genus1")
-       genus2 = request.form.get("genus2")
-       spp1 = request.form.get("spp1")
-       spp2 = request.form.get("spp2")
-       print ("Species 1 is "+genus1 + spp1 +" and species 2 is "+genus2+spp2)
+# <input class="center" type="submit" name="compareButton" value="Compare"></input>
+def getNames():
+    #return("stuff goes here")
+    if request.method == 'POST':
+        #if request.form['compareButton'] == "Compare":
+        print("ok")
+           # getting input with name = fname in HTML form
+           #genus1 = request.form.get("genus1")
+           #genus2 = request.form.get("genus2")
+           #spp1 = request.form.get("spp1")
+           #spp2 = request.form.get("spp2")
+           #print ("Species 1 is "+genus1 + spp1 +" and species 2 is "+genus2+spp2)
     #return render_template("form.html")
 
 
@@ -461,7 +466,7 @@ mainPage = '''
     </head>
     <body>
         <h1>Marine Taxonomic Comparison Tool</h1>
-        <form action="/compare" method="post">
+
             <table class="center">
                 <tr>
                     <td class="tableElements species1">
@@ -502,27 +507,23 @@ mainPage = '''
                 <tr></tr>
                 <tr></tr>
             </table>
-            <input class="center" type="button" value="Compare"></input>
+            <form action="" method="post">
+            <input class="center" type="submit" name="compareButton" value="Compare"></input>
             <input class="center" type="button" value="About"></input>
         </form>
         {extra}
     </body>
 </html>
 
-'''.format(extra=getNames)
+'''
+#.format(extra=getNames())
 
 
 
 
 @app.route('/', methods =["GET", "POST"])
-
-
-
-
-
-
 def index():
-    return mainPage
+    return mainPage.format(extra=getNames())
 
 # if a number is passed as a command line argument, this goes thru Flask
 # else, use the tkinter implementation
