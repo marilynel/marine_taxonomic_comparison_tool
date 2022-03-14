@@ -8,7 +8,7 @@
 # make a web application (with flask) --> long term goal
 # adjust posted image size
 ################################################################################
-
+import os
 from tkinter import *
 import tkinter as tk
 from PIL import ImageTk, Image
@@ -165,6 +165,7 @@ def clear_values():
 
 # Function: get image (my service)
 def post_image(colNum, name):
+
     scientificName = urllib.parse.quote_plus(name)
     imageServiceUrl = "http://notforlong.net:5007/requestImage?name={}"
     imageServiceUrl = imageServiceUrl.format(scientificName)
